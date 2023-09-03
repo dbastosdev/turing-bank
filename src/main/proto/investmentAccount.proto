@@ -1,0 +1,95 @@
+// Ref.: https://developers.google.com/protocol-buffers/docs/javatutorial
+
+// Versão de sintaxe
+syntax = "proto3";
+
+// package para não causar conflito com outros arquivos de mesma nomeclatura
+package grpc;
+
+// Gera um arquivo *.java para cada classe
+option java_multiple_files = true;
+// Define o local em que as classes java serao geradas
+option java_package = "br.com.douglas.turingbankh2.appAccountInvest.protos";
+// Define o nome do arquivo java
+option java_outer_classname = "InvestmentAccount";
+
+// Estrutura de dados que será serializada - Ref.: https://developers.google.com/protocol-buffers/docs/proto3
+
+// Classe Auxiliar
+message Customer {
+  uint64 id = 1;
+}
+
+// Classe Request padrão com todos os campos para instanciar uma nova conta de investimento
+message InvestmentAccountRequest {
+  string description = 1;
+
+  enum InvestmentAccountType {
+    TESOURO_DIRETO = 0;
+    ACOES = 1;
+    FUNDO_IMOBILIARIO = 2;
+  }
+
+  InvestmentAccountType investmentAccountType = 2;
+
+  string investmentAccountNumber = 3;
+  int64 accountId = 4;
+  double totalValue = 5;
+  double fee = 6;
+  int64 customerId = 7;
+}
+
+// MÉTODOS DO RECURSO - FIND BY ID
+// Request
+message FindInvestmentAccountByIdGRPCRequest {
+  int64 id = 1;
+}
+// Response
+message FindInvestmentAccountByIdGRPCResponse {
+  string investmentAccount = 1;
+}
+
+// MÉTODOS DO RECURSO - FIND ALL
+// Request
+message EmptyInvestmentAccountGRPCRequest {
+}
+// Response
+message InvestmentAccountListGRPCResponse {
+  string investmentAccountList = 1;
+}
+
+// MÉTODOS DO RECURSO - WITHDRAW / DELETE
+// Request
+message InvestmentAccountIdGRPCRequest {
+  int64 id = 1;
+}
+// Response
+message InvestmentAccountGRPCResponse {
+  string investmentAccount = 1;
+}
+
+// Response delete
+message EmptyInvestmentAccountGRPCResponse {
+}
+
+
+// SERVICE PARA SER CONSUMIDO PELO CLIENT - Kreya
+// Ref.: https://blog.logrocket.com/creating-a-crud-api-with-node-express-and-grpc/
+service InvestmentAccountGRPC {
+
+  rpc findInvestmentAccountById (FindInvestmentAccountByIdGRPCRequest) returns (FindInvestmentAccountByIdGRPCResponse) {
+  }
+
+  rpc findAllInvestmentAccount (EmptyInvestmentAccountGRPCRequest) returns (InvestmentAccountListGRPCResponse) {
+  }
+
+  rpc withdrawInvestmentAccount (InvestmentAccountIdGRPCRequest) returns (InvestmentAccountGRPCResponse) {
+  }
+
+  rpc deleteInvestmentAccount (InvestmentAccountIdGRPCRequest) returns (EmptyInvestmentAccountGRPCResponse) {
+  }
+
+  rpc insertInvestmentAccount (InvestmentAccountRequest) returns (InvestmentAccountGRPCResponse) {
+  }
+
+}

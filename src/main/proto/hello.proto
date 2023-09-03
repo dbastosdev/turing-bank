@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option java_package = "br.com.douglas.turingbankh2.protofiles";
+option java_multiple_files = true;
+
+message Empty {
+
+}
+
+message HelloWorldResponse {
+    string mensagem = 1;
+}
+
+message FindAccountByIdGRPCRequest {
+    int64 id = 1;
+}
+
+message FindAccountByIdGRPCResponse {
+    string account = 1;
+}
+
+service HelloWorldServiceGRPC {
+    rpc getHelloWorld (Empty) returns (HelloWorldResponse) {
+
+    }
+
+    rpc findAccountById(FindAccountByIdGRPCRequest) returns (FindAccountByIdGRPCResponse) {
+
+    }
+}
